@@ -51,7 +51,6 @@ export function buildStableLines(info: DeviceInfo, report: BugReport): TermLine[
   {text:'> Iniciando relatório local do navegador',color:'cmd',speed:12,pauseAfter:200},
   ...data.map(([label,value]):TermLine=>({text:`[${value === UNAVAILABLE ? 'INFO' : 'OK'}] ${label}: ${value}`,color:value === UNAVAILABLE ? 'dim' : 'ok',speed:9,pauseAfter:140})),
   {text:'[INFO] Campos não disponíveis não foram estimados por este aplicativo.',color:'dim',speed:9,pauseAfter:150},
-  {text:'[INFO] Esta leitura não altera o jogo, a rede ou as configurações do celular.',color:'dim',speed:9,pauseAfter:150},
   {text:'> Leitura concluída. Pronto para continuar.',color:'cmd',speed:12,pauseAfter:500},
  ]
 }
