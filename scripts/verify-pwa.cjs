@@ -1,0 +1,15 @@
+const assert = require('node:assert/strict')
+const fs = require('node:fs')
+const vm = require('node:vm')
+const ts = require('typescript')
+const code=ts.transpileModule(fs.readFileSync('src/destinations.ts','utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS}}).outputText
+const sandbox={exports:{}};vm.runInNewContext(code,sandbox)
+const {DESTINATIONS}=sandbox.exports
+assert.equal(DESTINATIONS.create,'https://pinguimsurf.com/demo/?ref=PS8FC86F03')
+assert.equal(DESTINATIONS.existing,DESTINATIONS.create)
+const manifest=JSON.parse(fs.readFileSync('dist/manifest.webmanifest','utf8'))
+assert.equal(manifest.display,'standalone');assert.equal(manifest.start_url,'/')
+for(const icon of manifest.icons) assert(fs.existsSync('dist'+icon.src))
+assert(fs.existsSync('dist/sw.js'));assert(fs.readFileSync('dist/index.html','utf8').includes('registerSW.js'))
+assert(fs.readFileSync('dist/sw.js','utf8').includes('index.html'))
+console.log('PASS: dois destinos, manifesto, icones, registro e precache PWA. Autenticacao tem testes separados.')
