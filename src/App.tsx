@@ -48,7 +48,7 @@ export default function App(){
  },[])
  useEffect(()=>{window.scrollTo({top:0,behavior:'smooth'})},[stage])
  return <MotionConfig reducedMotion="never"><div className="min-h-screen text-foreground">
- {!authReady ? <MobileFrame><p role="status" className="auth-footnote">Verificando sua sessão...</p></MobileFrame>
+ {!authReady ? <div className="suspense-gate"><div className="suspense-spinner" /></div>
  : authError ? <MobileFrame><p role="alert" className="login-error">{authError}</p></MobileFrame>
  : !authenticated ? <motion.div key="login" {...slideUp}><Login /></motion.div>
  : <AnimatePresence mode="wait">

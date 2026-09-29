@@ -32,7 +32,8 @@
 
 
 
-html,body { margin:0; background:var(--background); color:var(--foreground); font-family:var(--font-sans); -webkit-text-size-adjust:100%; overscroll-behavior-y:none; }
+html,body { margin:0; padding:0; width:100%; max-width:100vw; overflow-x:hidden; background:var(--background); color:var(--foreground); font-family:var(--font-sans); -webkit-text-size-adjust:100%; text-size-adjust:100%; overscroll-behavior-y:none; }
+#root { width:100%; max-width:100vw; min-height:100svh; overflow-x:hidden; }
 * { box-sizing:border-box; }
 h1, h2, h3, .screen-title h1, .auth-heading h1 { text-wrap: balance; letter-spacing: -0.025em; }
 p, .route-description, .auth-heading p, .screen-title p { text-wrap: pretty; }
