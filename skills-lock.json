@@ -7,6 +7,12 @@
       "skillPath": "skills/anti-ai-slop-writing/SKILL.md",
       "computedHash": "ccee34cea1e48c96cb33eca709eb49eca956349b3e60953d2e4eddd4125f3dad"
     },
+    "apple-web-app": {
+      "source": "joe-bell/skills",
+      "sourceType": "github",
+      "skillPath": "skills/apple-web-app/SKILL.md",
+      "computedHash": "5cf28555e537b16ff5c08c0d7116209e93138b60966bbbcc8e9d63efa484fec7"
+    },
     "better-layout": {
       "source": "jakubkrehel/skills",
       "sourceType": "github",
