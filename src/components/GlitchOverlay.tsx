@@ -1,4 +1,7 @@
 import { motion } from 'motion/react'
+import { Activity, Cpu, Database, ShieldCheck } from 'lucide-react'
+import { Badge } from '@/components/ui/badge'
+import { Progress } from '@/components/ui/progress'
 import type { AccountPath } from '../destinations'
 import { Terminal } from './Terminal'
 import { MobileFrame } from './MobileFrame'
@@ -15,36 +18,51 @@ export function GlitchOverlay({
 }) {
   return (
     <MobileFrame step={2}>
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-        <div className="screen-title">
-          <div className="mini-label">
-            <span /> LENDO SEU DISPOSITIVO
-          </div>
+      <motion.section className="analysis-screen" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+        <div className="analysis-status-row" data-reveal>
+          <Badge variant="secondary" className="analysis-status">
+            <Activity size={14} />
+            leitura em andamento
+          </Badge>
+          <span>{path === 'create' ? 'cadastro depois' : 'login depois'}</span>
+        </div>
+
+        <div className="analysis-hero" data-reveal>
           <h1>
-            Conhecendo melhor<br />
-            <em>seu aparelho.</em>
+            Lendo sinais do
+            <mark>navegador.</mark>
           </h1>
-          <p>Aguarde a exibição dos dados disponíveis no seu navegador. Não alteramos configurações do aparelho.</p>
+          <p>Nao mexemos no aparelho. A tela abaixo mostra somente dados disponiveis nesta sessao.</p>
         </div>
 
-        <div className="analysis-device">
-          {report.modelo}
-          <span>{report.rede.tipo === 'wifi' ? 'Wi-Fi' : '4G / 5G'} · informado por você</span>
+        <div className="analysis-summary-card" data-reveal>
+          <div className="analysis-device-badge">
+            <Cpu size={18} />
+            <div>
+              <span>aparelho informado</span>
+              <strong>{report.modelo}</strong>
+            </div>
+          </div>
+          <div className="analysis-network">
+            <Database size={15} />
+            <span>{report.rede.tipo === 'wifi' ? `Wi-Fi: ${report.rede.nome || 'nao informado'}` : '4G / 5G informado'}</span>
+          </div>
+          <Progress value={72} className="analysis-progress" aria-label="Leitura em andamento" />
         </div>
 
-        <div className="bp-terminal-window">
+        <div className="analysis-terminal-shell" data-reveal>
           <Terminal report={report} onDone={onDone} />
         </div>
 
-        <div className="small-notice">
-          <span className="notice-symbol">i</span>
+        <div className="analysis-note" data-reveal>
+          <ShieldCheck size={17} />
           <p>
             {path === 'create'
-              ? 'Aguarde a análise terminar. Depois, o botão para criar sua conta no site será liberado.'
-              : 'Aguarde a análise terminar. Depois, o botão para acessar sua conta será liberado.'}
+              ? 'Quando a leitura terminar, o cadastro sera liberado automaticamente.'
+              : 'Quando a leitura terminar, o login sera liberado automaticamente.'}
           </p>
         </div>
-      </motion.div>
+      </motion.section>
     </MobileFrame>
   )
 }

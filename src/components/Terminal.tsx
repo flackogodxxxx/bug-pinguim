@@ -24,14 +24,9 @@ export function Terminal({ report, onDone }: { report: BugReport; onDone: () => 
 
   const current = idx < lines.length ? lines[idx].text.slice(0, char) : ""
 
-  // Keep this run in memory; storage is optional and never a source for a fresh result.
+  // Keep this run in memory only, so diagnostic details are not retained after the session.
   useEffect(() => {
     rememberDiagnostic(info, report)
-    try {
-      localStorage.setItem("bug-pinguim:relatorio", JSON.stringify({ ...info, ...report }))
-    } catch {
-      /* sem storage */
-    }
   }, [info, report])
 
   // Máquina de digitação com cadência cinematográfica e legível

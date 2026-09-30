@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import { motion } from 'motion/react'
-import { ArrowRight, Eye, EyeOff, UserRound, KeyRound, Snowflake, Loader2 } from 'lucide-react'
+import { ArrowRight, Eye, EyeOff, UserRound, KeyRound, Snowflake, Loader2, ShieldCheck, ScanLine } from 'lucide-react'
 import { MobileFrame } from './MobileFrame'
 import { Button } from './ui/button'
 import { Input } from './ui/input'
@@ -23,7 +23,7 @@ export function Login() {
     setError('')
 
     if (!isFirebaseConfigured) {
-      setError('Firebase não configurado no .env.')
+      setError('Firebase nao configurado no .env.')
       return
     }
 
@@ -48,8 +48,8 @@ export function Login() {
 
   return (
     <MobileFrame>
-      <section className="auth-intro">
-        <div className="auth-art" aria-hidden="true">
+      <section className="auth-intro login-intro">
+        <div className="auth-art login-art" aria-hidden="true">
           <div className="auth-orbit" />
           <div className="auth-orbit orbit-two" />
           {[0, 1, 2, 3, 4, 5].map((i) => (
@@ -62,24 +62,40 @@ export function Login() {
             <Snowflake size={12} /> BUG PINGUIM
           </span>
         </div>
-        <div className="auth-heading" data-reveal>
-          <span className="section-eyebrow">DIAGNÓSTICO E LEITURA</span>
+
+        <div className="auth-heading login-heading" data-reveal>
+          <span className="login-access-pill">
+            <ShieldCheck size={13} />
+            acesso liberado
+          </span>
           <h1>
-            Acesse com seu<br />
-            <em>usuário e senha.</em>
+            Destrave seu<br />
+            <mark>teste gratis.</mark>
           </h1>
-          <p>Digite as credenciais fornecidas para liberar a análise no seu aparelho.</p>
+          <p>
+            Entre com seu acesso e rode a leitura do aparelho antes de decidir. Sem instalar nada no celular.
+          </p>
+          <div className="login-proof-row" aria-label="Beneficios do acesso">
+            <span>
+              <ScanLine size={14} />
+              leitura local
+            </span>
+            <span>
+              <ShieldCheck size={14} />
+              teste seguro
+            </span>
+          </div>
         </div>
       </section>
 
-      <form ref={formRef} className="auth-glass mobile-form" onSubmit={handleSubmit}>
+      <form ref={formRef} className="auth-glass mobile-form login-form" onSubmit={handleSubmit}>
         <div className="auth-panel-title">
-          <span>IDENTIFICAÇÃO</span>
-          <span>Acesso Seguro</span>
+          <span>Seu acesso</span>
+          <span>Comece agora</span>
         </div>
 
         <div className="field-group">
-          <label htmlFor="username">Usuário</label>
+          <label htmlFor="username">Usuario ou e-mail</label>
           <div className="auth-input">
             <UserRound size={18} />
             <Input
@@ -94,7 +110,7 @@ export function Login() {
                 setUser(e.target.value)
                 setError('')
               }}
-              placeholder="Digite seu usuário"
+              placeholder="Digite seu acesso"
               disabled={loading}
             />
           </div>
@@ -116,7 +132,7 @@ export function Login() {
                 setPassword(e.target.value)
                 setError('')
               }}
-              placeholder="Digite sua senha"
+              placeholder="Sua senha"
               disabled={loading}
             />
             <motion.button
@@ -151,7 +167,10 @@ export function Login() {
               </span>
             ) : (
               <>
-                <span>Entrar no Bug</span>
+                <span>
+                  Entrar e liberar teste
+                  <small>Rodar leitura do aparelho</small>
+                </span>
                 <span className="cta-arrow">
                   <ArrowRight size={20} />
                 </span>
@@ -160,7 +179,7 @@ export function Login() {
           </Button>
         </motion.div>
 
-        <p className="auth-footnote">Acesso exclusivo com credenciais fornecidas previamente.</p>
+        <p className="auth-footnote">Depois do login, o teste abre direto. Use as credenciais recebidas.</p>
       </form>
     </MobileFrame>
   )

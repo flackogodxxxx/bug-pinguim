@@ -46,5 +46,17 @@ export default defineConfig({
   ],
   resolve: { alias: { '@': path.resolve(import.meta.dirname, './src') } },
   server: { watch: { ignored: ['**/.agents/**', '**/dist/**'] } },
-  build: { chunkSizeWarningLimit: 550 },
+  build: {
+    sourcemap: false,
+    chunkSizeWarningLimit: 550,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules/firebase')) return 'firebase'
+          if (id.includes('node_modules/gsap') || id.includes('node_modules/motion')) return 'animation'
+          if (id.includes('node_modules/lucide-react') || id.includes('node_modules/radix-ui')) return 'ui'
+        },
+      },
+    },
+  },
 })

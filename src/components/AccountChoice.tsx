@@ -1,9 +1,30 @@
 import { useRef, useState } from 'react'
 import { motion } from 'motion/react'
-import { UserPlus, ArrowRight, LogOut, Timer, Check, UserRound, Sparkles } from 'lucide-react'
+import { ArrowRight, Check, LogOut, ScanLine, ShieldCheck, Sparkles, UserPlus, UserRound } from 'lucide-react'
 import { MobileFrame } from './MobileFrame'
 import { Button } from './ui/button'
+import { Badge } from './ui/badge'
+import { Progress } from './ui/progress'
 import type { AccountPath } from '../destinations'
+
+const routes = [
+  {
+    value: 'create',
+    Icon: UserPlus,
+    eyebrow: 'Primeiro acesso',
+    title: 'Criar conta',
+    text: 'Guarde o resultado e siga com um cadastro novo depois da leitura.',
+    action: 'Liberar cadastro',
+  },
+  {
+    value: 'existing',
+    Icon: UserRound,
+    eyebrow: 'Ja tenho conta',
+    title: 'Entrar na conta',
+    text: 'Use seu login atual e continue com o mesmo acesso apos a leitura.',
+    action: 'Abrir login',
+  },
+] as const
 
 export function AccountChoice({
   onChoose,
@@ -25,133 +46,120 @@ export function AccountChoice({
     try {
       await onLogout()
     } catch {
-      setLogoutError('Não foi possível sair deste acesso. Sua sessão continua ativa. Tente novamente.')
+      setLogoutError('Nao foi possivel sair deste acesso. Sua sessao continua ativa. Tente novamente.')
     } finally {
       logoutPending.current = false
       setLoggingOut(false)
     }
   }
 
+  const activeRoute = routes.find((route) => route.value === selected)
+
   return (
     <MobileFrame>
-      <div className="choice-welcome" data-reveal>
-        <img src="/icon-192.png" width="44" height="44" alt="" />
-        <div>
-          <span>ACESSO CONFIRMADO</span>
-          <p>Login autenticado com sucesso.</p>
+      <section className="choice-screen">
+        <div className="choice-status-row" data-reveal>
+          <Badge variant="secondary" className="choice-status">
+            <Check size={14} />
+            acesso confirmado
+          </Badge>
+          <span className="choice-status-copy">Leitura pronta para iniciar</span>
         </div>
-        <Check size={17} />
-      </div>
 
-      <div className="screen-title choice-title">
-        <h1>
-          Você já possui cadastro<br />
-          <em>no Pinguim?</em>
-        </h1>
-        <p>Defina o destino após a análise do dispositivo.</p>
-      </div>
+        <div className="choice-hero" data-reveal>
+          <h1>
+            Escolha como quer
+            <mark>continuar.</mark>
+          </h1>
+          <p>Primeiro fazemos a leitura do aparelho. Depois liberamos o caminho certo para voce.</p>
+        </div>
 
-      <fieldset className="route-options" disabled={loggingOut}>
-        <legend className="sr-only">Escolha se deseja criar uma conta ou usar sua conta existente</legend>
-        {(
-          [
-            {
-              value: 'create',
-              Icon: UserPlus,
-              kicker: 'NOVO USUÁRIO',
-              title: 'Criar uma nova conta',
-              text: 'Ainda não possuo cadastro. O link de registro será liberado ao fim da análise.',
-              detail: 'Cadastro após a análise',
-            },
-            {
-              value: 'existing',
-              Icon: UserRound,
-              kicker: 'JÁ CADASTRADO',
-              title: 'Acessar minha conta',
-              text: 'Já possuo login no site. Seguir direto para a conta ao finalizar.',
-              detail: 'Login após a análise',
-            },
-          ] as const
-        ).map(({ value, Icon, kicker, title, text, detail }) => (
-          <motion.label
-            key={value}
-            whileHover={{ scale: 1.015 }}
-            whileTap={{ scale: 0.985 }}
-            transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-            className={'route-card cursor-pointer ' + (selected === value ? 'route-selected' : '')}
-            data-reveal
-          >
-            <input
-              type="radio"
-              name="account-path"
-              value={value}
-              checked={selected === value}
-              onChange={() => setSelected(value)}
-            />
-            <span className="route-card-top">
-              <span className="route-icon">
-                <Icon size={24} strokeWidth={1.5} />
+        <div className="choice-scan-card" data-reveal aria-hidden="true">
+          <div>
+            <ScanLine size={18} />
+            <span>proximo passo</span>
+            <strong>leitura local</strong>
+          </div>
+          <Progress value={66} className="choice-scan-progress" />
+        </div>
+
+        <fieldset className="choice-route-list" disabled={loggingOut}>
+          <legend className="sr-only">Escolha se deseja criar uma conta ou usar sua conta existente</legend>
+
+          {routes.map(({ value, Icon, eyebrow, title, text, action }) => (
+            <motion.label
+              key={value}
+              whileHover={{ scale: 1.01 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ type: 'spring', stiffness: 420, damping: 28 }}
+              className={'choice-route ' + (selected === value ? 'is-selected' : '')}
+              data-reveal
+            >
+              <input
+                type="radio"
+                name="account-path"
+                value={value}
+                checked={selected === value}
+                onChange={() => setSelected(value)}
+              />
+              <span className="choice-route-icon">
+                <Icon size={22} strokeWidth={1.8} />
               </span>
-              <span className="route-check">{selected === value && <Check size={14} />}</span>
-            </span>
-            <span className="route-kicker">{kicker}</span>
-            <strong>{title}</strong>
-            <span className="route-description">{text}</span>
-            <span className="route-detail">
-              <Sparkles size={12} />
-              {detail}
-              <ArrowRight size={15} />
-            </span>
-          </motion.label>
-        ))}
-      </fieldset>
+              <span className="choice-route-copy">
+                <span>{eyebrow}</span>
+                <strong>{title}</strong>
+                <small>{text}</small>
+              </span>
+              <span className="choice-route-action">
+                {selected === value ? <Check size={15} /> : <ArrowRight size={16} />}
+                <small>{action}</small>
+              </span>
+            </motion.label>
+          ))}
+        </fieldset>
 
-      <div className="choice-next">
-        <div className="choice-explanation" aria-live="polite">
-          <Timer size={18} />
-          <p>
-            {selected === 'create'
-              ? 'A análise do celular será iniciada. Ao concluir, o botão de cadastro no site ficará liberado.'
-              : selected === 'existing'
-              ? 'A análise do celular será iniciada. Ao concluir, você poderá acessar sua conta normalmente.'
-              : 'Selecione uma opção acima para prosseguir para o teste.'}
-          </p>
+        <div className="choice-bottom" data-reveal>
+          <div className="choice-bottom-note" aria-live="polite">
+            <ShieldCheck size={17} />
+            <p>
+              {selected
+                ? `${activeRoute?.title}: a leitura roda agora e o destino abre em seguida.`
+                : 'Toque em uma rota para liberar o botao de continuar.'}
+            </p>
+          </div>
+
+          <motion.div
+            whileHover={selected ? { scale: 1.01 } : {}}
+            whileTap={selected ? { scale: 0.98 } : {}}
+            transition={{ type: 'spring', stiffness: 420, damping: 28 }}
+          >
+            <Button
+              disabled={!selected || loggingOut}
+              onClick={() => !logoutPending.current && selected && onChoose(selected)}
+              className="mobile-primary choice-cta w-full"
+            >
+              <span>
+                {activeRoute ? activeRoute.action : 'Escolha uma rota'}
+                <small>{activeRoute ? 'Comecar leitura do aparelho' : 'Cadastro ou login'}</small>
+              </span>
+              <ArrowRight size={20} />
+            </Button>
+          </motion.div>
         </div>
 
-        <motion.div
-          whileHover={selected ? { scale: 1.01 } : {}}
-          whileTap={selected ? { scale: 0.98 } : {}}
-          transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+        <motion.button
+          whileTap={{ scale: 0.96 }}
+          className="restart-button choice-logout"
+          onClick={handleLogout}
+          disabled={loggingOut}
+          aria-busy={loggingOut}
         >
-          <Button
-            disabled={!selected || loggingOut}
-            onClick={() => !logoutPending.current && selected && onChoose(selected)}
-            className="mobile-primary w-full"
-          >
-            {selected === 'create'
-              ? 'Prosseguir para o cadastro'
-              : selected === 'existing'
-              ? 'Prosseguir para a conta'
-              : 'Selecione uma opção'}
-            <ArrowRight size={19} />
-          </Button>
-        </motion.div>
+          {loggingOut ? <Sparkles size={15} /> : <LogOut size={15} />}
+          {loggingOut ? 'Saindo...' : 'Sair deste acesso'}
+        </motion.button>
 
-        <p className="choice-sequence">
-          Aparelho <span>→</span> Diagnóstico <span>→</span> Site Pinguim
-        </p>
-      </div>
-
-      <motion.button
-        whileTap={{ scale: 0.95 }}
-        className="restart-button flex items-center justify-center gap-2 mt-4"
-        onClick={handleLogout}
-        disabled={loggingOut}
-        aria-busy={loggingOut}
-      >
-        <LogOut size={15} /> {loggingOut ? 'Saindo...' : 'Sair deste acesso'}
-      </motion.button>
-      {logoutError && <p role="alert" className="login-error">{logoutError}</p>}
+        {logoutError && <p role="alert" className="login-error">{logoutError}</p>}
+      </section>
     </MobileFrame>
   )
 }

@@ -1,7 +1,10 @@
 import { motion } from 'motion/react'
-import { ArrowRight, Sparkles, Clock, CheckCircle2 } from 'lucide-react'
+import { ArrowRight, CheckCircle2, LockKeyholeOpen, ScanLine, ShieldCheck, Zap } from 'lucide-react'
 import { MobileFrame } from './MobileFrame'
 import { Button } from './ui/button'
+import { Badge } from './ui/badge'
+import { Card, CardContent, CardFooter } from './ui/card'
+import { Separator } from './ui/separator'
 
 export function TrialNotice({
   username,
@@ -12,85 +15,102 @@ export function TrialNotice({
 }) {
   return (
     <MobileFrame>
-      <section className="auth-intro">
-        <div className="auth-art" aria-hidden="true">
-          <div className="auth-orbit" />
-          <div className="auth-orbit orbit-two" />
-          {[0, 1, 2, 3, 4, 5].map((i) => (
-            <span key={i} className={'ice-mote mote-' + i} />
-          ))}
-          <div className="auth-logo-float">
-            <img src="/brand-penguin.webp" alt="" width="164" height="164" fetchPriority="high" />
-          </div>
-          <span className="ice-stamp">
-            <Sparkles size={12} /> ACESSO LIBERADO
-          </span>
-        </div>
-
-        <div className="auth-heading" data-reveal>
-          <span className="section-eyebrow">LICENÇA ATIVA</span>
+      <section className="trial-screen">
+        <div className="auth-heading trial-copy" data-reveal>
           <h1>
-            Seu teste grátis<br />
-            <em>está liberado.</em>
+            <span>Teste liberado.</span>
+            <strong>Comece em 1 minuto.</strong>
           </h1>
-          <p>
+          <p className="trial-copy-lead">
             {username ? `Bem-vindo, ${username}. ` : ''}
-            Você tem <strong className="tabular-nums text-foreground">3 dias</strong> corridos para utilizar o diagnóstico no seu aparelho.
+            Use os proximos <mark>3 dias</mark> para descobrir se tela, hardware e conexao estao prontos para rodar sem dor de cabeca.
           </p>
         </div>
-      </section>
 
-      <div className="auth-glass mobile-form">
-        <div className="auth-panel-title">
-          <span>STATUS</span>
-          <span className="text-emerald-400 flex items-center gap-1.5 font-medium">
-            <span className="inline-block h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-            Disponível agora
-          </span>
-        </div>
-
-        <div className="rounded-xl border border-primary/30 bg-primary/10 p-4 text-left shadow-inner">
-          <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-primary/20 text-accent">
-              <Clock size={22} />
-            </div>
-            <div>
-              <span className="text-[11px] font-semibold uppercase tracking-wider text-accent">
-                Período de Demonstração
+        <Card className="trial-pass" data-reveal>
+          <CardContent className="trial-pass-content">
+            <div className="trial-pass-top">
+              <Badge variant="outline" className="trial-live-badge">
+                <span aria-hidden="true" />
+                teste ativo
+              </Badge>
+              <span className="trial-pass-mode">
+                <ShieldCheck size={14} />
+                para sozinho no fim
               </span>
-              <p className="text-base font-bold tabular-nums text-foreground">
-                3 Dias Liberados
-              </p>
             </div>
-          </div>
 
-          <div className="mt-3.5 space-y-2.5 border-t border-primary/20 pt-3 text-xs text-muted-foreground">
-            <div className="flex items-start gap-2 text-foreground/90">
-              <CheckCircle2 size={16} className="text-accent shrink-0 mt-0.5" />
-              <span>Leitura completa de hardware, tela e conexão em tempo real</span>
+            <div className="trial-access-pass" aria-label="Passe de teste gratis ativo por 72 horas">
+              <div className="trial-access-rail" aria-hidden="true">
+                <span>BUG PINGUIM</span>
+              </div>
+
+              <div className="trial-access-main">
+                <span className="trial-access-kicker">
+                  <LockKeyholeOpen size={15} />
+                  acesso liberado
+                </span>
+
+                <div className="trial-access-number">
+                  <strong className="tabular-nums">72</strong>
+                  <span>horas</span>
+                </div>
+
+                <p>Rode o diagnostico completo antes de criar sua conta definitiva.</p>
+              </div>
+
+              <div className="trial-access-scan" aria-hidden="true">
+                <ScanLine size={18} />
+              </div>
             </div>
-            <div className="flex items-start gap-2 text-foreground/90">
-              <CheckCircle2 size={16} className="text-accent shrink-0 mt-0.5" />
-              <span>Sem renovação automática nem cobranças surpresa ao fim do teste</span>
+
+            <div className="trial-action-strip" aria-label="Como usar o teste gratis">
+              <div className="is-active">
+                <Zap size={14} />
+                <span>Agora</span>
+                <strong>Inicie</strong>
+              </div>
+              <div>
+                <ScanLine size={14} />
+                <span>Depois</span>
+                <strong>Compare</strong>
+              </div>
             </div>
-          </div>
-        </div>
 
-        <motion.div
-          whileHover={{ scale: 1.01 }}
-          whileTap={{ scale: 0.98 }}
-          transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-        >
-          <Button onClick={onContinue} className="mobile-primary auth-submit w-full">
-            <span>Continuar para a análise</span>
-            <span className="cta-arrow">
-              <ArrowRight size={20} />
-            </span>
-          </Button>
-        </motion.div>
+            <Separator className="trial-separator" />
 
-        <p className="auth-footnote">Toque em Continuar para configurar e iniciar a verificação.</p>
-      </div>
+            <div className="trial-proof-grid">
+              <div>
+                <CheckCircle2 size={17} />
+                <span><strong>Veja o estado real</strong> do aparelho antes de criar a conta.</span>
+              </div>
+              <div>
+                <CheckCircle2 size={17} />
+                <span><strong>Sem pegadinha:</strong> acabou o prazo, o teste para sozinho.</span>
+              </div>
+            </div>
+          </CardContent>
+
+          <CardFooter className="trial-pass-footer">
+            <motion.div
+              whileHover={{ scale: 1.01 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+              className="w-full"
+            >
+              <Button onClick={onContinue} className="mobile-primary auth-submit w-full">
+                <span>
+                  Usar meu teste
+                  <small>Rodar diagnostico agora</small>
+                </span>
+                <span className="cta-arrow">
+                  <ArrowRight size={20} />
+                </span>
+              </Button>
+            </motion.div>
+          </CardFooter>
+        </Card>
+      </section>
     </MobileFrame>
   )
 }
